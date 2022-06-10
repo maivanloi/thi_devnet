@@ -9,19 +9,50 @@
         config:
         - name: Ethernet0/1
           ipv4:
-          - address: 192.168.1.1/24
+          - address: 192.168.1.1/24 
         - name: Ethernet0/2
           ipv4:
           - address: 192.168.3.1/24
     - name: No shut cac cong
       ios_interfaces:
-        config:
+        config: 
         - name: Ethernet0/1
           enabled: true
         - name: Ethernet0/2
-          enabled: true
+          enabled: true 
     - name: Cau hinh static route tren R1
       ios_static_route:
         prefix: 192.168.2.0
         mask: 255.255.255.0
-        next_hop: 192.168.3.2
+        next_hop: 192.168.3.2 
+
+
+- name: Cau hinh tren thiet bi R2
+  hosts: R2
+  gather_facts: no
+
+  tasks:
+    - name: Dat IP cho cac cong
+      ios_l3_interfaces:
+        config:
+        - name: Ethernet0/1
+          ipv4:
+          - address: 192.168.2.1/24 
+        - name: Ethernet0/2
+          ipv4:
+          - address: 192.168.3.2/24
+    - name: No shut cac cong
+      ios_interfaces:
+        config: 
+        - name: Ethernet0/1
+          enabled: true
+        - name: Ethernet0/2
+          enabled: true 
+    - name: Cau hinh static route tren R2
+      ios_static_route:
+        prefix: 192.168.1.0
+        mask: 255.255.255.0
+        next_hop: 192.168.3.1 
+    - name: ping e0/1 R2 den R1
+      ios_ping:
+        dest: 192.168.1.1 
